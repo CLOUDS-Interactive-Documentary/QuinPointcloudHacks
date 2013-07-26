@@ -1,8 +1,8 @@
 //
-//  CloudsVisualSystemEmpty.cpp
+//  ShaderTestVisualSystem.cpp
 //
 
-#include "CloudsVisualSystemEmpty.h"
+#include "ShaderTestVisualSystem.h"
 #include "CloudsRGBDVideoPlayer.h"
 
 //#include "CloudsRGBDVideoPlayer.h"
@@ -11,7 +11,7 @@
 //#endif
 
 //These methods let us add custom GUI parameters and respond to their events
-void CloudsVisualSystemEmpty::selfSetupGui(){
+void ShaderTestVisualSystem::selfSetupGui(){
 
 	customGui = new ofxUISuperCanvas("CUSTOM", gui);
 	customGui->copyCanvasStyle(gui);
@@ -24,39 +24,39 @@ void CloudsVisualSystemEmpty::selfSetupGui(){
 	customGui->addButton("Custom Button", false);
 	customGui->addToggle("Custom Toggle", &customToggle);
 	
-	ofAddListener(customGui->newGUIEvent, this, &CloudsVisualSystemEmpty::selfGuiEvent);
+	ofAddListener(customGui->newGUIEvent, this, &ShaderTestVisualSystem::selfGuiEvent);
 	
 	guis.push_back(customGui);
 	guimap[customGui->getName()] = customGui;
 }
 
-void CloudsVisualSystemEmpty::selfGuiEvent(ofxUIEventArgs &e){
+void ShaderTestVisualSystem::selfGuiEvent(ofxUIEventArgs &e){
 	if(e.widget->getName() == "Custom Button"){
 		cout << "Button pressed!" << endl;
 	}
 }
 
 //Use system gui for global or logical settings, for exmpl
-void CloudsVisualSystemEmpty::selfSetupSystemGui(){
+void ShaderTestVisualSystem::selfSetupSystemGui(){
 	
 }
 
-void CloudsVisualSystemEmpty::guiSystemEvent(ofxUIEventArgs &e){
+void ShaderTestVisualSystem::guiSystemEvent(ofxUIEventArgs &e){
 	
 }
 //use render gui for display settings, like changing colors
-void CloudsVisualSystemEmpty::selfSetupRenderGui(){
+void ShaderTestVisualSystem::selfSetupRenderGui(){
 
 }
 
-void CloudsVisualSystemEmpty::guiRenderEvent(ofxUIEventArgs &e){
+void ShaderTestVisualSystem::guiRenderEvent(ofxUIEventArgs &e){
 	
 }
 
 // selfSetup is called when the visual system is first instantiated
 // This will be called during a "loading" screen, so any big images or
 // geometry should be loaded here
-void CloudsVisualSystemEmpty::selfSetup(){
+void ShaderTestVisualSystem::selfSetup(){
 
 	if(ofFile::doesFileExist(getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.mov")){
 		getRGBDVideoPlayer().setup(getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.mov",
@@ -82,31 +82,31 @@ void CloudsVisualSystemEmpty::selfSetup(){
 // selfPresetLoaded is called whenever a new preset is triggered
 // it'll be called right before selfBegin() and you may wish to
 // refresh anything that a preset may offset, such as stored colors or particles
-void CloudsVisualSystemEmpty::selfPresetLoaded(string presetPath){
+void ShaderTestVisualSystem::selfPresetLoaded(string presetPath){
 	
 }
 
 // selfBegin is called when the system is ready to be shown
 // this is a good time to prepare for transitions
 // but try to keep it light weight as to not cause stuttering
-void CloudsVisualSystemEmpty::selfBegin(){
+void ShaderTestVisualSystem::selfBegin(){
 	
 }
 
 //do things like ofRotate/ofTranslate here
 //any type of transformation that doesn't have to do with the camera
-void CloudsVisualSystemEmpty::selfSceneTransformation(){
+void ShaderTestVisualSystem::selfSceneTransformation(){
 	
 }
 
 //normal update call
-void CloudsVisualSystemEmpty::selfUpdate(){
+void ShaderTestVisualSystem::selfUpdate(){
 
 }
 
 // selfDraw draws in 3D using the default ofEasyCamera
 // you can change the camera by returning getCameraRef()
-void CloudsVisualSystemEmpty::selfDraw(){
+void ShaderTestVisualSystem::selfDraw(){
 	
 	ofPushMatrix();
 	setupRGBDTransforms();
@@ -119,11 +119,11 @@ void CloudsVisualSystemEmpty::selfDraw(){
 }
 
 // draw any debug stuff here
-void CloudsVisualSystemEmpty::selfDrawDebug(){
+void ShaderTestVisualSystem::selfDrawDebug(){
 	
 }
 // or you can use selfDrawBackground to do 2D drawings that don't use the 3D camera
-void CloudsVisualSystemEmpty::selfDrawBackground(){
+void ShaderTestVisualSystem::selfDrawBackground(){
 
 	//turn the background refresh off
 	//bClearBackground = false;
@@ -131,37 +131,37 @@ void CloudsVisualSystemEmpty::selfDrawBackground(){
 }
 // this is called when your system is no longer drawing.
 // Right after this selfUpdate() and selfDraw() won't be called any more
-void CloudsVisualSystemEmpty::selfEnd(){
+void ShaderTestVisualSystem::selfEnd(){
 	
 	simplePointcloud.clear();
 	
 }
 // this is called when you should clear all the memory and delet anything you made in setup
-void CloudsVisualSystemEmpty::selfExit(){
+void ShaderTestVisualSystem::selfExit(){
 	
 }
 
 //events are called when the system is active
 //Feel free to make things interactive for you, and for the user!
-void CloudsVisualSystemEmpty::selfKeyPressed(ofKeyEventArgs & args){
+void ShaderTestVisualSystem::selfKeyPressed(ofKeyEventArgs & args){
 	
 }
-void CloudsVisualSystemEmpty::selfKeyReleased(ofKeyEventArgs & args){
-	
-}
-
-void CloudsVisualSystemEmpty::selfMouseDragged(ofMouseEventArgs& data){
+void ShaderTestVisualSystem::selfKeyReleased(ofKeyEventArgs & args){
 	
 }
 
-void CloudsVisualSystemEmpty::selfMouseMoved(ofMouseEventArgs& data){
+void ShaderTestVisualSystem::selfMouseDragged(ofMouseEventArgs& data){
 	
 }
 
-void CloudsVisualSystemEmpty::selfMousePressed(ofMouseEventArgs& data){
+void ShaderTestVisualSystem::selfMouseMoved(ofMouseEventArgs& data){
 	
 }
 
-void CloudsVisualSystemEmpty::selfMouseReleased(ofMouseEventArgs& data){
+void ShaderTestVisualSystem::selfMousePressed(ofMouseEventArgs& data){
+	
+}
+
+void ShaderTestVisualSystem::selfMouseReleased(ofMouseEventArgs& data){
 	
 }
