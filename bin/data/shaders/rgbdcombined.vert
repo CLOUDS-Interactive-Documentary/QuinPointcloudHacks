@@ -49,6 +49,12 @@ varying float positionValid;
 varying vec4 faceFeatureSample;
 varying vec4 deltaChangeSample;
 
+//QUINS ADDITIONS
+uniform float smoothAudioAmp;
+uniform float audioAmp;
+uniform float randSeed;
+uniform float threshold;
+
 //LIGHT
 varying vec3 eye;
 varying vec3 normal;
@@ -192,6 +198,9 @@ void main(void){
 		deltaChangeSample = vec4(0.);
 	}
 		
-    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * pos;
+    vec4 newPos = pos;// vec3(pos.x/* + sin(pos)*audioAmplitude*/, pos.y, pos.z, pos.w);
+    newPos.xyz += normal.xyz * /*sin(pos.x/10) */ max(0.,.15 - smoothAudioAmp) * 600;
+    newPos.xyz += sin(pos.x/10) * audioAmp * 100;
+    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * newPos;
     gl_FrontColor = gl_Color;
 }

@@ -58,6 +58,7 @@ void ShaderTestVisualSystem::guiRenderEvent(ofxUIEventArgs &e){
 // geometry should be loaded here
 void ShaderTestVisualSystem::selfSetup(){
 
+    smoothedAudioAmplitude = 0;
 	if(ofFile::doesFileExist(getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.mov")){
 		getRGBDVideoPlayer().setup(getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.mov",
 								   getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.xml" );
@@ -111,11 +112,23 @@ void ShaderTestVisualSystem::selfDraw(){
 	ofPushMatrix();
 	setupRGBDTransforms();
 	pointcloudShader.begin();
+    float currAmp = getRGBDVideoPlayer().getPlayer().getAmplitude();
+    if (currAmp > smoothedAudioAmplitude){
+        smoothedAudioAmplitude = smoothedAudioAmplitude*.2+currAmp*.8;
+    } else {
+        smoothedAudioAmplitude = smoothedAudioAmplitude*.99+currAmp*.01;
+    }
+    pointcloudShader.setUniform1f("threshold", 3);
+    pointcloudShader.setUniform1f("smoothAudioAmp", smoothedAudioAmplitude);
+    pointcloudShader.setUniform1f("audioAmp", MIN(1, MAX(0, ofMap(currAmp, 0, .2, 0, 1))));
+    pointcloudShader.setUniform1f("randSeed", ofRandom(1));
 	getRGBDVideoPlayer().setupProjectionUniforms(pointcloudShader);
 	simplePointcloud.drawVertices();
+//    simplePointcloud.drawWireframe();
+//    simplePointcloud.drawFaces();
 	pointcloudShader.end();
 	ofPopMatrix();
-	
+//	getRGBDVideoPlayer().getPlayer().getAmplitude();
 }
 
 // draw any debug stuff here

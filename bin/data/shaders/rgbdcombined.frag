@@ -7,6 +7,11 @@ varying float positionValid;
 varying vec4 faceFeatureSample;
 varying vec4 deltaChangeSample;
 
+//QUINS ADDITIONS
+uniform float smoothAudioAmp;
+uniform float audioAmp;
+uniform float randSeed;
+uniform float threshold;
 
 //LIGHTING
 varying vec3 eye;
@@ -19,6 +24,12 @@ uniform float skinMultiplier;
 uniform float baseMultiplier;
 
 const float epsilon = 1e-6;
+
+float rand(vec2 n)
+{
+    return 0.5 + 0.5 *
+    fract(sin(dot(n.xy, vec2(12.9898, 78.233)))* 43758.5453);
+}
 
 float calculateLight(){
 	vec3 N = normal;
@@ -54,7 +65,30 @@ void main(){
 	}
 	
     vec4 col = texture2DRect(texture, gl_TexCoord[0].st);
+//    float p = 1 - audioAmplitude; //rand(gl_TextCoord) - audioAmplitude;
+//    if (p > threshold){
+//        col += rand(gl_TexCoord[0] + gl_TexCoord[1], p);
+//    }
     gl_FragColor = gl_Color * col * attenuate * max( calculateLight(), isSkin() );
+
+//    float p = rand(vec2(randSeed, gl_TexCoord[0].s));
+//    p = p*p;
+//    p = p*p;
+//    p = p*p;
+//    p = p*p;
+//    p = p*p;//*p*p*p*p*p*p*p*p*p*p*p*p*p*p*p*p*p*p;
+////    p = p*p*p;
+//    if (p > smoothAudioAmp){
+//        float v = rand(vec2(randSeed, gl_TexCoord[0].t));
+//        if (v < .5){
+//            v = 0.0;
+//        } else {
+//            v = 1.0;
+//        }
+//        gl_FragColor.x = v;//vec3(v,v,v)//rand(vec2(gl_TexCoord[0].s, audioAmp));
+//        gl_FragColor.y = v;
+//        gl_FragColor.z = v;
+//    }
 	//gl_FragColor = vec4(normal,1.0);
 }
 

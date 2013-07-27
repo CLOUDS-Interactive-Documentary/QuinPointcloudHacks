@@ -111,6 +111,7 @@ protected:
 	bool customToggle;
 	float customFloat1;
 	float customFloat2;
+    float smoothedAudioAmplitude;
 	
 	ofImage someImage;
 	ofShader pointcloudShader;
