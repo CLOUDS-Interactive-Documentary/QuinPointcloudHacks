@@ -13,14 +13,14 @@
 #include "CloudsVisualSystem.h"
 
 //TODO: rename this to your own visual system
-class ShaderTestVisualSystem : public CloudsVisualSystem {
+class QuinPointcloudHacks : public CloudsVisualSystem {
   public:
     
 	//TODO: Change this to the name of your visual system
 	//This determines your data path so name it at first!
 	//ie getVisualSystemDataPath() uses this
     string getSystemName(){
-		return "ShaderTestVisualSystem";
+		return "QuinPointcloudHacks";
 	}
 
 	//These methods let us add custom GUI parameters and respond to their events

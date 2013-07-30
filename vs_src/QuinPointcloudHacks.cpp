@@ -1,8 +1,8 @@
 //
-//  ShaderTestVisualSystem.cpp
+//  QuinPointcloudHacks.cpp
 //
 
-#include "ShaderTestVisualSystem.h"
+#include "QuinPointcloudHacks.h"
 #include "CloudsRGBDVideoPlayer.h"
 
 //#include "CloudsRGBDVideoPlayer.h"
@@ -11,7 +11,7 @@
 //#endif
 
 //These methods let us add custom GUI parameters and respond to their events
-void ShaderTestVisualSystem::selfSetupGui(){
+void QuinPointcloudHacks::selfSetupGui(){
 
 	customGui = new ofxUISuperCanvas("CUSTOM", gui);
 	customGui->copyCanvasStyle(gui);
@@ -24,39 +24,39 @@ void ShaderTestVisualSystem::selfSetupGui(){
 	customGui->addButton("Custom Button", false);
 	customGui->addToggle("Custom Toggle", &customToggle);
 	
-	ofAddListener(customGui->newGUIEvent, this, &ShaderTestVisualSystem::selfGuiEvent);
+	ofAddListener(customGui->newGUIEvent, this, &QuinPointcloudHacks::selfGuiEvent);
 	
 	guis.push_back(customGui);
 	guimap[customGui->getName()] = customGui;
 }
 
-void ShaderTestVisualSystem::selfGuiEvent(ofxUIEventArgs &e){
+void QuinPointcloudHacks::selfGuiEvent(ofxUIEventArgs &e){
 	if(e.widget->getName() == "Custom Button"){
 		cout << "Button pressed!" << endl;
 	}
 }
 
 //Use system gui for global or logical settings, for exmpl
-void ShaderTestVisualSystem::selfSetupSystemGui(){
+void QuinPointcloudHacks::selfSetupSystemGui(){
 	
 }
 
-void ShaderTestVisualSystem::guiSystemEvent(ofxUIEventArgs &e){
+void QuinPointcloudHacks::guiSystemEvent(ofxUIEventArgs &e){
 	
 }
 //use render gui for display settings, like changing colors
-void ShaderTestVisualSystem::selfSetupRenderGui(){
+void QuinPointcloudHacks::selfSetupRenderGui(){
 
 }
 
-void ShaderTestVisualSystem::guiRenderEvent(ofxUIEventArgs &e){
+void QuinPointcloudHacks::guiRenderEvent(ofxUIEventArgs &e){
 	
 }
 
 // selfSetup is called when the visual system is first instantiated
 // This will be called during a "loading" screen, so any big images or
 // geometry should be loaded here
-void ShaderTestVisualSystem::selfSetup(){
+void QuinPointcloudHacks::selfSetup(){
 
     smoothedAudioAmplitude = 0;
 	if(ofFile::doesFileExist(getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.mov")){
@@ -83,31 +83,31 @@ void ShaderTestVisualSystem::selfSetup(){
 // selfPresetLoaded is called whenever a new preset is triggered
 // it'll be called right before selfBegin() and you may wish to
 // refresh anything that a preset may offset, such as stored colors or particles
-void ShaderTestVisualSystem::selfPresetLoaded(string presetPath){
+void QuinPointcloudHacks::selfPresetLoaded(string presetPath){
 	
 }
 
 // selfBegin is called when the system is ready to be shown
 // this is a good time to prepare for transitions
 // but try to keep it light weight as to not cause stuttering
-void ShaderTestVisualSystem::selfBegin(){
+void QuinPointcloudHacks::selfBegin(){
 	
 }
 
 //do things like ofRotate/ofTranslate here
 //any type of transformation that doesn't have to do with the camera
-void ShaderTestVisualSystem::selfSceneTransformation(){
+void QuinPointcloudHacks::selfSceneTransformation(){
 	
 }
 
 //normal update call
-void ShaderTestVisualSystem::selfUpdate(){
+void QuinPointcloudHacks::selfUpdate(){
 
 }
 
 // selfDraw draws in 3D using the default ofEasyCamera
 // you can change the camera by returning getCameraRef()
-void ShaderTestVisualSystem::selfDraw(){
+void QuinPointcloudHacks::selfDraw(){
 	
     glEnable(GL_DEPTH_TEST);
 	ofPushMatrix();
@@ -133,11 +133,11 @@ void ShaderTestVisualSystem::selfDraw(){
 }
 
 // draw any debug stuff here
-void ShaderTestVisualSystem::selfDrawDebug(){
+void QuinPointcloudHacks::selfDrawDebug(){
 	
 }
 // or you can use selfDrawBackground to do 2D drawings that don't use the 3D camera
-void ShaderTestVisualSystem::selfDrawBackground(){
+void QuinPointcloudHacks::selfDrawBackground(){
 
 	//turn the background refresh off
 	//bClearBackground = false;
@@ -145,37 +145,37 @@ void ShaderTestVisualSystem::selfDrawBackground(){
 }
 // this is called when your system is no longer drawing.
 // Right after this selfUpdate() and selfDraw() won't be called any more
-void ShaderTestVisualSystem::selfEnd(){
+void QuinPointcloudHacks::selfEnd(){
 	
 	simplePointcloud.clear();
 	
 }
 // this is called when you should clear all the memory and delet anything you made in setup
-void ShaderTestVisualSystem::selfExit(){
+void QuinPointcloudHacks::selfExit(){
 	
 }
 
 //events are called when the system is active
 //Feel free to make things interactive for you, and for the user!
-void ShaderTestVisualSystem::selfKeyPressed(ofKeyEventArgs & args){
+void QuinPointcloudHacks::selfKeyPressed(ofKeyEventArgs & args){
 	
 }
-void ShaderTestVisualSystem::selfKeyReleased(ofKeyEventArgs & args){
-	
-}
-
-void ShaderTestVisualSystem::selfMouseDragged(ofMouseEventArgs& data){
+void QuinPointcloudHacks::selfKeyReleased(ofKeyEventArgs & args){
 	
 }
 
-void ShaderTestVisualSystem::selfMouseMoved(ofMouseEventArgs& data){
+void QuinPointcloudHacks::selfMouseDragged(ofMouseEventArgs& data){
 	
 }
 
-void ShaderTestVisualSystem::selfMousePressed(ofMouseEventArgs& data){
+void QuinPointcloudHacks::selfMouseMoved(ofMouseEventArgs& data){
 	
 }
 
-void ShaderTestVisualSystem::selfMouseReleased(ofMouseEventArgs& data){
+void QuinPointcloudHacks::selfMousePressed(ofMouseEventArgs& data){
+	
+}
+
+void QuinPointcloudHacks::selfMouseReleased(ofMouseEventArgs& data){
 	
 }
