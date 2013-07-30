@@ -1,105 +1,14 @@
-# Empty Visual System 
+# QuinPointcloudHacks
 
-Welcome to the CLOUDS Interactive Documentary CodeStorm! We'll be creating Visual Systems, modular visual sketches used that are used along with the pointcloud interviews to illustrate the concepts presented in the film.
+Please refer to [EmptyVisualSystem](https://github.com/CLOUDS-Interactive-Documentary/EmptyVisualSystem) for instructions on how to create a Visual System.
 
-In order to make the process of making a VisualSystem efficient and easy we have put together a wrapper that is a lot like a testApp.cpp but with ofxTimeline and ofxUI built in for variable and animation controls. The system can also store all the settings in presets letting you configure each sketch in different ways and invoke the visuals within the film.
+The heart of this Visual System is a shader which contains a few different sets of functionality. There are a number of flags which are used to enable and disable the different processing paths on the vertex and fragment shader.
 
-## Create your own visual system
+First is a "3D Printing" effect, which gradually transitions points to larger high-contrast, low-saturation points. This happens a row at a time, slowly "building" the pointcloud into a more solid form.
 
-Download a fresh openFrameworks 0.7.4 from http://www.openframeworks.cc/download/. Unzip it and do the following commands in the terminal
-	
-* Clone the empty template
+Second is a shattering effect. This effect pushes all the vertices away from the surface of the speaker. This is combined with Audio Amplitude information to make the person "congeal" as they speak and drift back into an abstract cloud as they pause.
 
-		$ cd of_v0.7.4_osx_release/apps/myApps
-		$ git clone https://github.com/CLOUDS-Interactive-Documentary/EmptyVisualSystem
-	
-* Get the shared code library for CLOUDS
- 
-		$ cd EmptyVisualSystem/
-		$ git submodule init
-		$ git submodule update
-		
-* Clone all the addons
-
-		$ chmod 733 cloneaddons.sh
-		$ ./cloneaddons.sh
-		
-Next you need to rename the project to the name of your sketch,
-	
-* Rename the project file from EmptyVisualSystem to something else
-* In `CloudsVisualSystemEmpty.h` modify the system name to match your sketch
-		
-		string getSystemName(){
-			return "MyVisualSystem"
-		}
-
-* Change CloudsVisualSystem class name to another class name using find-replace
-* Ask us to create a new repo on [CLOUDS-Interactive-Documentary](https://github.com/CLOUDS-Interactive-Documentary) that matches your sketch name 'MyVisualSystem' 
-* Its URL would be git@github.com:CLOUDS-Interactive-Documentary/MyVisualSystem
-* Rename emptyVisualSystem folder in myApps/ to MyVisualSystem
-* In the terminal, cd into MyVisualSystem/ and redirect from the empty repo to your new repo
-
-		$ git remote rm origin
-		$ git remote add origin git@github.com:CLOUDS-Interactive-Documentary/MyVisualSystem.git 
-		$ git push -u origin master
-
-### Modify ofMaterial & ofLight
-
-To Run you'll need to modify two things in the oF Core
-
-In libs/openFrameworks/gl/ofLight.h add reference `&` and remove `const` keyword
-
-		ofFloatColor& getAmbientColor();
-		ofFloatColor& getDiffuseColor();
-		ofFloatColor& getSpecularColor();
-
-In libs/openFrameworks/gl/ofLight.cpp as well
-
-		//----------------------------------------
-		ofFloatColor& ofLight::getAmbientColor() {
-			return ambientColor;
-		}
-		
-		//----------------------------------------
-		ofFloatColor& ofLight::getDiffuseColor() {
-			return diffuseColor;
-		}
-		
-		//----------------------------------------
-		ofFloatColor& ofLight::getSpecularColor() {
-			return specularColor;
-		}
-		
-In libs/openFrameworks/gl/ofMaterial.h add reference `&` to the material colors
-
-		ofFloatColor& getDiffuseColor();
-		ofFloatColor& getAmbientColor();
-		ofFloatColor& getSpecularColor();
-		ofFloatColor& getEmissiveColor();
-		float& getShininess();
-
-Match the changes in libs/openFrameworks/gl/ofMaterial.cpp 
-
-		float& ofMaterial::getShininess(){
-			return shininess;
-		}
-		
-		ofFloatColor& ofMaterial::getDiffuseColor() {
-			return diffuse;
-		}
-		
-		ofFloatColor& ofMaterial::getAmbientColor() {
-			return ambient;
-		}
-		
-		ofFloatColor& ofMaterial::getSpecularColor() {
-			return specular;
-		}
-		
-		ofFloatColor& ofMaterial::getEmissiveColor() {
-			return emissive;
-		}
-
+Third is a vibration effect. This reacts to the Audio Amplitude as well and runs the sine wave "through" the vertices, displacing them proportionally to the volume.
 
 ### Included Addons
 
