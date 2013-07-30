@@ -200,7 +200,7 @@ void main(void){
 		
     vec4 newPos = pos;// vec3(pos.x/* + sin(pos)*audioAmplitude*/, pos.y, pos.z, pos.w);
     newPos.xyz += normal.xyz * /*sin(pos.x/10) */ max(0.,.15 - smoothAudioAmp) * 600;
-    newPos.xyz += sin(pos.x/10) * audioAmp * 100;
+    newPos.xyz += sin(pos.x/10) * audioAmp * 50;
     gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * newPos;
     gl_FrontColor = gl_Color;
 }

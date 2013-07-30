@@ -109,6 +109,7 @@ void ShaderTestVisualSystem::selfUpdate(){
 // you can change the camera by returning getCameraRef()
 void ShaderTestVisualSystem::selfDraw(){
 	
+    glEnable(GL_DEPTH_TEST);
 	ofPushMatrix();
 	setupRGBDTransforms();
 	pointcloudShader.begin();
@@ -125,7 +126,7 @@ void ShaderTestVisualSystem::selfDraw(){
 	getRGBDVideoPlayer().setupProjectionUniforms(pointcloudShader);
 	simplePointcloud.drawVertices();
 //    simplePointcloud.drawWireframe();
-//    simplePointcloud.drawFaces();
+    simplePointcloud.drawFaces();
 	pointcloudShader.end();
 	ofPopMatrix();
 //	getRGBDVideoPlayer().getPlayer().getAmplitude();
