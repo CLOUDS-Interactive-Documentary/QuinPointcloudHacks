@@ -13,16 +13,19 @@
 //These methods let us add custom GUI parameters and respond to their events
 void QuinPointcloudHacks::selfSetupGui(){
 
-	customGui = new ofxUISuperCanvas("CUSTOM", gui);
+	customGui = new ofxUISuperCanvas("Quin's", gui);
 	customGui->copyCanvasStyle(gui);
 	customGui->copyCanvasProperties(gui);
-	customGui->setName("Custom");
+	customGui->setName("Quin's");
 	customGui->setWidgetFontSize(OFX_UI_FONT_SMALL);
 	
-	customGui->addSlider("Custom Float 1", 1, 1000, &customFloat1);
-	customGui->addSlider("Custom Float 2", 1, 1000, &customFloat2);
-	customGui->addButton("Custom Button", false);
-	customGui->addToggle("Custom Toggle", &customToggle);
+	customGui->addSlider("printheadX", 0.0, 1.0, &printheadX);
+	customGui->addSlider("printheadY", 0.0, 1.0, &printheadY);
+	customGui->addToggle("printEnable", &printEnable);
+    customGui->addToggle("shatterEnable", &shatterEnable);
+    customGui->addToggle("verticesEnable", &verticesEnable);
+    customGui->addToggle("facesEnable", &facesEnable);
+    customGui->addToggle("rawEnable", &rawEnable);
 	
 	ofAddListener(customGui->newGUIEvent, this, &QuinPointcloudHacks::selfGuiEvent);
 	
@@ -57,7 +60,14 @@ void QuinPointcloudHacks::guiRenderEvent(ofxUIEventArgs &e){
 // This will be called during a "loading" screen, so any big images or
 // geometry should be loaded here
 void QuinPointcloudHacks::selfSetup(){
+    
+    printheadX = 0;
+    printheadY = 0.32;
+    printSpeed = .01;
+    printGranularity = .01;
+    printEnable = false;
 
+    
     smoothedAudioAmplitude = 0;
 	if(ofFile::doesFileExist(getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.mov")){
 		getRGBDVideoPlayer().setup(getVisualSystemDataPath() + "TestVideo/Jer_TestVideo.mov",
@@ -102,14 +112,25 @@ void QuinPointcloudHacks::selfSceneTransformation(){
 
 //normal update call
 void QuinPointcloudHacks::selfUpdate(){
-
+    if (printEnable){
+        printheadX += printSpeed;
+        if (printheadX > 1){
+            printheadY += printGranularity;
+            printheadX = 0;
+        }
+    }
 }
 
 // selfDraw draws in 3D using the default ofEasyCamera
 // you can change the camera by returning getCameraRef()
 void QuinPointcloudHacks::selfDraw(){
 	
-    glEnable(GL_DEPTH_TEST);
+    if (printEnable){
+        glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    }
+    if (shatterEnable){
+        
+    }
 	ofPushMatrix();
 	setupRGBDTransforms();
 	pointcloudShader.begin();
@@ -119,14 +140,28 @@ void QuinPointcloudHacks::selfDraw(){
     } else {
         smoothedAudioAmplitude = smoothedAudioAmplitude*.99+currAmp*.01;
     }
+    //custom variables
+    pointcloudShader.setUniform1i("enableFlags", (printEnable ? 1 : 0) | (shatterEnable ? 2 : 0));
+    //3D Print
+    pointcloudShader.setUniform1f("printheadWidth", printGranularity);
+    pointcloudShader.setUniform2f("printhead", printheadX, printheadY);
+    //Shatter
     pointcloudShader.setUniform1f("threshold", 3);
     pointcloudShader.setUniform1f("smoothAudioAmp", smoothedAudioAmplitude);
     pointcloudShader.setUniform1f("audioAmp", MIN(1, MAX(0, ofMap(currAmp, 0, .2, 0, 1))));
     pointcloudShader.setUniform1f("randSeed", ofRandom(1));
 	getRGBDVideoPlayer().setupProjectionUniforms(pointcloudShader);
-	simplePointcloud.drawVertices();
+    if (verticesEnable){
+        simplePointcloud.drawVertices();
+    }
 //    simplePointcloud.drawWireframe();
-    simplePointcloud.drawFaces();
+    if (facesEnable){
+        simplePointcloud.drawFaces();
+    }
+    if (rawEnable){
+        pointcloudShader.setUniform1i("enableFlags", 0);
+        simplePointcloud.drawVertices();
+    }
 	pointcloudShader.end();
 	ofPopMatrix();
 //	getRGBDVideoPlayer().getPlayer().getAmplitude();

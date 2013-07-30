@@ -1,5 +1,7 @@
 #version 110
 #extension GL_ARB_texture_rectangle : enable
+#extension GL_EXT_gpu_shader4 : enable
+
 
 uniform sampler2DRect texture;
 
@@ -8,6 +10,12 @@ varying vec4 faceFeatureSample;
 varying vec4 deltaChangeSample;
 
 //QUINS ADDITIONS
+uniform int enableFlags;
+//FOR 3D PRINTER
+uniform vec2 printhead;
+uniform float printheadWidth;
+uniform vec4 colorRect;
+//FOR SCATTER SHOT
 uniform float smoothAudioAmp;
 uniform float audioAmp;
 uniform float randSeed;
@@ -52,6 +60,23 @@ float isSkin(){
 }
 
 void main(){
+    if ((enableFlags & 1) > 0){//if Printing
+        //throw away anything not covered by the printhead yet
+        float texCoordT = colorRect.w+colorRect.y-(printhead.y*colorRect.w);
+        float texCoordS = colorRect.z+colorRect.x-(printhead.x*colorRect.z);
+        float texCoordW = colorRect.w*printheadWidth;
+        if (gl_TexCoord[0].t < texCoordT){
+            if (gl_TexCoord[0].t < texCoordT - texCoordW){
+                discard;
+                return;
+            } else {
+                if (gl_TexCoord[0].s < texCoordS){
+                    discard;
+                    return;
+                }
+            }
+        }
+    }
     
     if(positionValid < epsilon){
     	discard;
@@ -69,7 +94,6 @@ void main(){
 //    if (p > threshold){
 //        col += rand(gl_TexCoord[0] + gl_TexCoord[1], p);
 //    }
-    gl_FragColor = gl_Color * col * attenuate * max( calculateLight(), isSkin() );
 
 //    float p = rand(vec2(randSeed, gl_TexCoord[0].s));
 //    p = p*p;
@@ -89,6 +113,15 @@ void main(){
 //        gl_FragColor.y = v;
 //        gl_FragColor.z = v;
 //    }
+    
+    if ((enableFlags & 1) > 0){//if Printing
+        float v = col.r*.59+col.b*.11+col.g*.29;
+        v = pow(v*1.5, 2.);
+        col.r = v;
+        col.g = v;
+        col.b = v;
+    }
+    gl_FragColor = gl_Color * col * attenuate * max( calculateLight(), isSkin() );
 	//gl_FragColor = vec4(normal,1.0);
 }
 

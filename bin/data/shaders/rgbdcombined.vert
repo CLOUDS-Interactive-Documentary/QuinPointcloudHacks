@@ -1,6 +1,8 @@
 
 #version 120
 #extension GL_ARB_texture_rectangle : enable
+#extension GL_EXT_gpu_shader4 : enable
+
 
 //This shader takes a combined video / depth / normal texture and projects it onto the given geometry
 //The video files are generated using the RGBDCombinedVideoExporter
@@ -50,6 +52,9 @@ varying vec4 faceFeatureSample;
 varying vec4 deltaChangeSample;
 
 //QUINS ADDITIONS
+uniform int enableFlags;
+//FOR 3D PRINT
+//FOR SCATTER SHOT
 uniform float smoothAudioAmp;
 uniform float audioAmp;
 uniform float randSeed;
@@ -203,4 +208,8 @@ void main(void){
     newPos.xyz += sin(pos.x/10) * audioAmp * 50;
     gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * newPos;
     gl_FrontColor = gl_Color;
+    
+    if ((enableFlags & 1) > 0){//if Printing
+        gl_PointSize = 5;
+    }
 }

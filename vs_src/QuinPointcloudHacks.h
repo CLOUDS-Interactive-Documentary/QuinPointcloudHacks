@@ -108,12 +108,16 @@ protected:
     //
 	
 	ofxUISuperCanvas* customGui;
-	bool customToggle;
-	float customFloat1;
-	float customFloat2;
     float smoothedAudioAmplitude;
 	
-	ofImage someImage;
 	ofShader pointcloudShader;
 	ofVboMesh simplePointcloud;
+    
+    //GUI
+    float printheadX, printheadY, printSpeed, printGranularity;
+    bool printEnable;
+    bool shatterEnable;
+    bool rawEnable;
+    bool facesEnable;
+    bool verticesEnable;
 };
