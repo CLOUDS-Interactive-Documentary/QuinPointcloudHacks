@@ -22,7 +22,9 @@ void QuinPointcloudHacks::selfSetupGui(){
 	customGui->addSlider("printheadX", 0.0, 1.0, &printheadX);
 	customGui->addSlider("printheadY", 0.0, 1.0, &printheadY);
 	customGui->addToggle("printEnable", &printEnable);
+    customGui->addToggle("printDisableDiscard", &printDisableDiscard);
     customGui->addToggle("shatterEnable", &shatterEnable);
+    customGui->addToggle("wavEnable", &wavEnable);
     customGui->addToggle("verticesEnable", &verticesEnable);
     customGui->addToggle("facesEnable", &facesEnable);
     customGui->addToggle("rawEnable", &rawEnable);
@@ -129,19 +131,19 @@ void QuinPointcloudHacks::selfDraw(){
         glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
     }
     if (shatterEnable){
-        
+        glEnable(GL_DEPTH_TEST);
     }
 	ofPushMatrix();
 	setupRGBDTransforms();
 	pointcloudShader.begin();
-    float currAmp = getRGBDVideoPlayer().getPlayer().getAmplitude();
+    float currAmp = .5;//getRGBDVideoPlayer().getPlayer().getAmplitude();
     if (currAmp > smoothedAudioAmplitude){
         smoothedAudioAmplitude = smoothedAudioAmplitude*.2+currAmp*.8;
     } else {
         smoothedAudioAmplitude = smoothedAudioAmplitude*.99+currAmp*.01;
     }
     //custom variables
-    pointcloudShader.setUniform1i("enableFlags", (printEnable ? 1 : 0) | (shatterEnable ? 2 : 0));
+    pointcloudShader.setUniform1i("enableFlags", getFlags());
     //3D Print
     pointcloudShader.setUniform1f("printheadWidth", printGranularity);
     pointcloudShader.setUniform2f("printhead", printheadX, printheadY);

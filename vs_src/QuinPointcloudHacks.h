@@ -115,9 +115,14 @@ protected:
     
     //GUI
     float printheadX, printheadY, printSpeed, printGranularity;
-    bool printEnable;
-    bool shatterEnable;
-    bool rawEnable;
-    bool facesEnable;
-    bool verticesEnable;
+    bool printEnable, shatterEnable, wavEnable, printDisableDiscard;
+    
+    bool rawEnable, facesEnable, verticesEnable;
+    
+    int getFlags(){
+        return (printEnable ? 1 : 0 ) |
+                (shatterEnable ? 2 : 0) |
+                (wavEnable ? 4 : 0) |
+                (printDisableDiscard ? 8 : 0);
+    }
 };

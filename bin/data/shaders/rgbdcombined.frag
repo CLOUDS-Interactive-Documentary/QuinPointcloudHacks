@@ -59,21 +59,31 @@ float isSkin(){
 	return min(faceFeatureSample.r + faceFeatureSample.g, 1.0);
 }
 
+bool discardPrint(){
+    float texCoordT = colorRect.w+colorRect.y-(printhead.y*colorRect.w);
+    float texCoordS = colorRect.z+colorRect.x-(printhead.x*colorRect.z);
+    float texCoordW = colorRect.w*printheadWidth;
+    if (gl_TexCoord[0].t < texCoordT){
+        if (gl_TexCoord[0].t < texCoordT - texCoordW){
+            return true;
+        } else {
+            if (gl_TexCoord[0].s < texCoordS){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void main(){
-    if ((enableFlags & 1) > 0){//if Printing
+    bool discardPrint = false;
+    if ((enableFlags & 1) > 0){//printEnable
         //throw away anything not covered by the printhead yet
-        float texCoordT = colorRect.w+colorRect.y-(printhead.y*colorRect.w);
-        float texCoordS = colorRect.z+colorRect.x-(printhead.x*colorRect.z);
-        float texCoordW = colorRect.w*printheadWidth;
-        if (gl_TexCoord[0].t < texCoordT){
-            if (gl_TexCoord[0].t < texCoordT - texCoordW){
+        discardPrint = discardPrint();
+        if((enableFlags & 8) == 0){//!printDisableDiscard
+            if (discardPrint){
                 discard;
                 return;
-            } else {
-                if (gl_TexCoord[0].s < texCoordS){
-                    discard;
-                    return;
-                }
             }
         }
     }
@@ -114,7 +124,7 @@ void main(){
 //        gl_FragColor.z = v;
 //    }
     
-    if ((enableFlags & 1) > 0){//if Printing
+    if ((enableFlags & 1) > 0 && !discardPrint){//printEnable
         float v = col.r*.59+col.b*.11+col.g*.29;
         v = pow(v*1.5, 2.);
         col.r = v;

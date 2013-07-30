@@ -54,6 +54,8 @@ varying vec4 deltaChangeSample;
 //QUINS ADDITIONS
 uniform int enableFlags;
 //FOR 3D PRINT
+uniform vec2 printhead;
+uniform float printheadWidth;
 //FOR SCATTER SHOT
 uniform float smoothAudioAmp;
 uniform float audioAmp;
@@ -105,6 +107,22 @@ float depthValueFromSample( vec2 depthPos){
     vec2  halfvec = vec2(.5,.5);
     float depth = rgb2hsl( texture2DRect(texture, floor(depthPos) + halfvec ).xyz ).r;
     return depth * ( maxDepth - minDepth ) + minDepth;
+}
+
+bool discardPrint(){
+    float texCoordT = colorRect.w+colorRect.y-(printhead.y*colorRect.w);
+    float texCoordS = colorRect.z+colorRect.x-(printhead.x*colorRect.z);
+    float texCoordW = colorRect.w*printheadWidth;
+    if (gl_TexCoord[0].t < texCoordT){
+        if (gl_TexCoord[0].t < texCoordT - texCoordW){
+            return true;
+        } else {
+            if (gl_TexCoord[0].s < texCoordS){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void main(void){
@@ -204,12 +222,16 @@ void main(void){
 	}
 		
     vec4 newPos = pos;// vec3(pos.x/* + sin(pos)*audioAmplitude*/, pos.y, pos.z, pos.w);
-    newPos.xyz += normal.xyz * /*sin(pos.x/10) */ max(0.,.15 - smoothAudioAmp) * 600;
-    newPos.xyz += sin(pos.x/10) * audioAmp * 50;
+    if ((enableFlags & 2) > 0){//shatterEnable
+        newPos.xyz += normal.xyz * max(0.,.15 - smoothAudioAmp) * 600;
+    }
+    if ((enableFlags & 4) > 0){//wavEnable
+        newPos.xyz += sin(pos.x/10) * audioAmp * 50;
+    }
     gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * newPos;
     gl_FrontColor = gl_Color;
     
-    if ((enableFlags & 1) > 0){//if Printing
+    if ((enableFlags & 1) > 0 && !discardPrint()){//printEnable
         gl_PointSize = 5;
     }
 }
