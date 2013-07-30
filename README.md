@@ -2,6 +2,8 @@
 
 Please refer to [EmptyVisualSystem](https://github.com/CLOUDS-Interactive-Documentary/EmptyVisualSystem) for instructions on how to create a Visual System.
 
+NOTE: I added #extension GL_EXT_gpu_shader4 : enable to both the shader files so I could do bitwise operations. If necessary this can be refactored to do without the extension.
+
 The heart of this Visual System is a shader which contains a few different sets of functionality. There are a number of flags which are used to enable and disable the different processing paths on the vertex and fragment shader.
 
 First is a "3D Printing" effect, which gradually transitions points to larger high-contrast, low-saturation points. This happens a row at a time, slowly "building" the pointcloud into a more solid form.
